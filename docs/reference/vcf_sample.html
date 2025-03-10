@@ -73,20 +73,20 @@ a subset of 10,000 variants</p>
 
     <div id="format">
     <h2>Format</h2>
-    <p>`vcf_sample`
+    <p><code>vcf_sample</code>
 A CollapsedVCF</p>
 <p>dim: 10000 1
 rowRanges(vcf):
-  GRanges with 5 metadata columns: paramRangeID, REF, ALT, QUAL, FILTER
+GRanges with 5 metadata columns: paramRangeID, REF, ALT, QUAL, FILTER
 info(vcf):
-  DataFrame with 1 column: AF
+DataFrame with 1 column: AF
 info(header(vcf)):
-  Number Type  Description
+Number Type  Description
 AF A      Float Allele Frequency
 geno(vcf):
-  List of length 9: ES, SE, LP, AF, SS, EZ, SI, NC, ID
+List of length 9: ES, SE, LP, AF, SS, EZ, SI, NC, ID
 geno(header(vcf)):
-  Number Type    Description
+Number Type    Description
 ES A      Float   Effect size estimate relative to the alternative allele
 SE A      Float   Standard error of effect size estimate
 LP A      Float   -log10 p-value for effect estimate
