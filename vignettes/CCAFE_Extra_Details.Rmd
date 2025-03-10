@@ -1,8 +1,11 @@
 ---
 title: "CCAFE Extra Details"
 author: "Hayley Stoneman"
-date: "2024-07-03"
-output: rmarkdown::html_vignette
+date: "`r Sys.Date()`"
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{CCAFE Extra Details}
   %\VignetteEngine{knitr::rmarkdown}
@@ -35,7 +38,7 @@ This dataset will have:
   * 5000 XX cases and 5000 XY cases
   * 5000 XX controls and 5000 XY controls
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=TRUE, message=FALSE}
 library(tidyverse)
 library(CCAFE)
 library(DescTools)
@@ -243,7 +246,7 @@ p_1 <- ggplot(res_AF, aes(x = case_sim_af, y = AF_case)) +
   theme_bw() +
   xlab("True AF") +
   ylab("Estimated AF") +
-  geom_text(x = .175, y = .9, label = paste0("CCC=", round(DescTools::CCC(res_AF$case_sim_af, res_AF$AF_case, na.rm = T)$rho.c$est, 4))) +
+  geom_text(x = .175, y = .9, label = paste0("CCC=", round(DescTools::CCC(res_AF$case_sim_af, res_AF$AF_case, na.rm = TRUE)$rho.c$est, 4))) +
   ggtitle("1. No Conversion")
 
 res_AF$MAF_case <- sapply(res_AF$AF_case, function(x) ifelse(x > 0.5, 1-x, x))
@@ -254,7 +257,7 @@ p_2 <- ggplot(res_AF, aes(x = case_sim_maf, y = MAF_case)) +
   theme_bw() +
   xlab("True MAF") +
   ylab("Estimated MAF") +
-  geom_text(x = .1, y = .45, label = paste0("CCC=", round(DescTools::CCC(res_AF$case_sim_maf, res_AF$MAF_case, na.rm = T)$rho.c$est, 4))) +
+  geom_text(x = .1, y = .45, label = paste0("CCC=", round(DescTools::CCC(res_AF$case_sim_maf, res_AF$MAF_case, na.rm = TRUE)$rho.c$est, 4))) +
   ggtitle("2. Convert AFTER")
 
 p_3 <- ggplot(res_MAF, aes(x = case_sim_maf, y = AF_case)) +
@@ -263,7 +266,7 @@ p_3 <- ggplot(res_MAF, aes(x = case_sim_maf, y = AF_case)) +
   theme_bw() +
   xlab("True MAF") +
   ylab("Estimated MAF") +
-  geom_text(x = .1, y = .48, label = paste0("CCC=", round(DescTools::CCC(res_MAF$case_sim_maf, res_MAF$AF_case, na.rm = T)$rho.c$est, 4))) +
+  geom_text(x = .1, y = .48, label = paste0("CCC=", round(DescTools::CCC(res_MAF$case_sim_maf, res_MAF$AF_case, na.rm = TRUE)$rho.c$est, 4))) +
   ggtitle("3. Convert BEFORE")
 
 cowplot::plot_grid(p_1, p_2, p_3, ncol = 3)
@@ -381,6 +384,8 @@ p_c <- ggplot(se_res_sex, aes(x = case_sim_maf, y = MAF_case)) +
 
 plot_grid(p_a, p_b, p_c, ncol =3)
 ```
+
+# Session Info
 ```{r}
 sessionInfo()
 ```

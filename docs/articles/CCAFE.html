@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CCAFE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.3</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
                         <h4 data-toc-skip class="author">Hayley
 Stoneman</h4>
             
-            <h4 data-toc-skip class="date">2024-07-03</h4>
+            <h4 data-toc-skip class="date">2025-03-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/wolffha/CCAFE/blob/HEAD/vignettes/CCAFE.Rmd" class="external-link"><code>vignettes/CCAFE.Rmd</code></a></small>
       <div class="hidden name"><code>CCAFE.Rmd</code></div>
@@ -128,11 +128,14 @@ genomic data.</p>
 <p><br><br> This document introduces you to the functions in CCAFE and
 gives small examples of how they can be used with summary
 statistics.</p>
-<p><br><br> Find more details and documentation on GitHub: (<a href="https://wolffha.github.io/CCAFE/" class="external-link uri">https://wolffha.github.io/CCAFE/</a>)</p>
+<p><br><br> Find more details and documentation on GitHub: (<a href="https://wolffha.github.io/CCAFE_documentation/" class="external-link uri">https://wolffha.github.io/CCAFE_documentation/</a>)</p>
 <p><br><br> To jump forward to individual function specifics:</p>
 <p><a href="#CaseControl_AF"><strong>CaseControl_AF</strong></a> – <a href="#a-quick-demo-of-CaseControl_AF">fast forward to example</a></p>
 <p><a href="#CaseControl_SE"><strong>CaseControl_SE</strong></a> – <a href="#a-quick-demo-of-CaseControl_SE">fast forward to example</a>
 <br><br><br></p>
+<p>To view details on using GWAS VCF formatted data and Bioconductor
+packages to prepare your data for use in CCAFE:</p>
+<p><a href="#VCF">Fast forward to demo</a></p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -324,15 +327,22 @@ details see vignette titled “CCAFE Extra Details”</p>
 <p>These examples use the provided sample data which is a subset of 500
 variants from chromosome 1 of the Pan-UKBB diabetes GWAS in non-Finnish
 European individuals.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wolffha/CCAFE/" class="external-link">CCAFE</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="a-quick-demo-of-CaseControl_AF">A quick demo of CaseControl_AF()<a class="anchor" aria-label="anchor" href="#a-quick-demo-of-CaseControl_AF"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wolffha/CCAFE/" class="external-link">CCAFE</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># load the data</span></span>
+<p>Here is a quick demonstration of using the CaseControl_AF function in
+the CCAFE package using the sample data. This code block loads the
+library. It then loads the sample data and ensures that it is in the
+required format (dataframe). It then runs the methods using the required
+parameters (data, N_case, N_control, OR_colname, AF_total_colname) and
+prints out the first few lines of the resulting returned dataframe.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load the data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"sampleDat"</span><span class="op">)</span></span>
-<span><span class="va">sampleDat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sampleDat</span><span class="op">)</span></span>
+<span><span class="va">sampleDat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sampleDat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">results_af</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CaseControl_AF.html">CaseControl_AF</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sampleDat</span>,</span>
 <span>                             N_case <span class="op">=</span> <span class="fl">16550</span>,</span>
@@ -355,29 +365,39 @@ European individuals.</p>
 <span><span class="co">#&gt; 4 1.07925e-04 0.8996046 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
 <span><span class="co">#&gt; 5 8.82145e-05 0.2853611 3.670262e-05 1.077692e-05 3.776488e-05</span></span>
 <span><span class="co">#&gt; 6 1.15995e-02 0.9848460 1.401528e-02 1.381395e-02 1.402353e-02</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>We can then plot the estimates from this example using the provided
+known AFs.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot the results</span></span>
 <span><span class="co"># first need minor allele frequency to compare to true_maf_case</span></span>
-<span><span class="va">results_af</span><span class="op">$</span><span class="va">MAF_case</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">results_af</span><span class="op">$</span><span class="va">AF_case</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">results_af</span><span class="op">$</span><span class="va">MAF_case</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">results_af</span><span class="op">$</span><span class="va">AF_case</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">x</span> <span class="op">&gt;</span> <span class="fl">0.5</span>, <span class="fl">1</span><span class="op">-</span><span class="va">x</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">results_af</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">results_af</span><span class="op">)</span></span>
+<span><span class="va">results_af</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">results_af</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">results_af</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">true_maf_case</span>, y <span class="op">=</span> <span class="va">MAF_case</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Example CaseControl_AF()"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">results_af</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">true_maf_case</span>, y <span class="op">=</span> <span class="va">MAF_case</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Example CaseControl_AF()"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CCAFE_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="a-quick-demo-of-CaseControl_SE">A quick demo of CaseControl_SE()<a class="anchor" aria-label="anchor" href="#a-quick-demo-of-CaseControl_SE"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wolffha/CCAFE/" class="external-link">CCAFE</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># load the data</span></span>
+<p>Here is a quick demonstration of using the CaseControl_SE function in
+the CCAFE package using the sample data. This code block loads the
+library. It then loads the sample data and ensures that it is in the
+required format (dataframe). It then runs the methods using the required
+parameters (data, N_case, N_control, OR_colname, SE_colname,
+chromosome_colname, position_colname, do_correction, sex_chromosomes)
+and prints out the first few lines of the resulting returned
+dataframe.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load the data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"sampleDat"</span><span class="op">)</span></span>
-<span><span class="va">sampleDat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sampleDat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># always ensure data is a dataframe before inputting to CCAFE methods</span></span>
+<span><span class="va">sampleDat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sampleDat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># First run without correction</span></span>
 <span><span class="va">results_se_noCorr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CaseControl_SE.html">CaseControl_SE</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sampleDat</span>,</span>
@@ -404,21 +424,30 @@ European individuals.</p>
 <span><span class="co">#&gt; 4 1.07925e-04 0.8996046 0.000000e+00 2.513875e-06 2.794421e-06 2.783379e-06</span></span>
 <span><span class="co">#&gt; 5 8.82145e-05 0.2853611 3.670262e-05 1.946826e-05 6.821993e-05 6.630105e-05</span></span>
 <span><span class="co">#&gt; 6 1.15995e-02 0.9848460 1.401528e-02 1.250050e-02 1.269041e-02 1.268294e-02</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># plot the results</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">results_se_noCorr</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">true_maf_case</span>, y <span class="op">=</span> <span class="va">MAF_case</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">coord_cartesian</span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Example CaseControl_SE() No Correction"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="CCAFE_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<p>We can then plot the estimates from this example using the provided
+known AFs.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wolffha/CCAFE/" class="external-link">CCAFE</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># load the data</span></span>
+<code class="sourceCode R"><span><span class="co"># plot the results</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">results_se_noCorr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">true_maf_case</span>, y <span class="op">=</span> <span class="va">MAF_case</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Example CaseControl_SE() No Correction"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="CCAFE_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
+<p>Here is a quick demonstration of using the CaseControl_SE function in
+the CCAFE package using the sample data, but also performing the
+provided bias correction. This code block loads the library. It then
+loads the sample data and ensures that it is in the required format
+(dataframe). It then runs the methods using the required parameters
+(data, N_case, N_control, OR_colname, SE_colname, chromosome_colname,
+position_colname, do_correction, sex_chromosomes) and prints out the
+first few lines of the resulting returned dataframe.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load the data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"sampleDat"</span><span class="op">)</span></span>
-<span><span class="va">sampleDat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sampleDat</span><span class="op">)</span></span>
+<span><span class="co"># always ensure data is a dataframe before inputting to CCAFE methods</span></span>
+<span><span class="va">sampleDat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">sampleDat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">corr_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CHR <span class="op">=</span> <span class="va">sampleDat</span><span class="op">$</span><span class="va">CHR</span>,</span>
 <span>                        POS <span class="op">=</span> <span class="va">sampleDat</span><span class="op">$</span><span class="va">POS</span>,</span>
@@ -451,27 +480,237 @@ European individuals.</p>
 <span><span class="co">#&gt; 4 1.07925e-04 0.8996046 0.000000e+00 2.513875e-06 2.794421e-06 2.783379e-06</span></span>
 <span><span class="co">#&gt; 5 8.82145e-05 0.2853611 3.670262e-05 1.946826e-05 6.821993e-05 6.630105e-05</span></span>
 <span><span class="co">#&gt; 6 1.15995e-02 0.9848460 1.401528e-02 1.250050e-02 1.269041e-02 1.268294e-02</span></span>
-<span><span class="co">#&gt;   MAF_case_adj MAF_control_adj MAF_total_adj</span></span>
-<span><span class="co">#&gt; 1 2.101173e-01    2.100673e-01  2.100692e-01</span></span>
-<span><span class="co">#&gt; 2 4.831277e-01    4.834338e-01  4.834218e-01</span></span>
-<span><span class="co">#&gt; 3 1.598885e-01    1.593830e-01  1.594029e-01</span></span>
-<span><span class="co">#&gt; 4 2.513875e-06    2.794421e-06  2.783379e-06</span></span>
-<span><span class="co">#&gt; 5 1.946826e-05    6.821993e-05  6.630105e-05</span></span>
-<span><span class="co">#&gt; 6 8.977955e-03    9.167862e-03  9.160387e-03</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="co"># plot the results</span></span>
+<span><span class="co">#&gt;   MAF_total_adj MAF_control_adj MAF_case_adj</span></span>
+<span><span class="co">#&gt; 1  2.100692e-01    2.100673e-01 2.101173e-01</span></span>
+<span><span class="co">#&gt; 2  4.834218e-01    4.834338e-01 4.831277e-01</span></span>
+<span><span class="co">#&gt; 3  1.594029e-01    1.593830e-01 1.598885e-01</span></span>
+<span><span class="co">#&gt; 4  2.783379e-06    2.794421e-06 2.513875e-06</span></span>
+<span><span class="co">#&gt; 5  6.630105e-05    6.821993e-05 1.946826e-05</span></span>
+<span><span class="co">#&gt; 6  9.160387e-03    9.167862e-03 8.977955e-03</span></span></code></pre></div>
+<p>Again, we can plot the estimates (corrected) and compare them to the
+provided known AFs and see reduced bias.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># plot the results</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">results_se_corr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">true_maf_case</span>, y <span class="op">=</span> <span class="va">MAF_case_adj</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Example CaseControl_SE() With Correction"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="CCAFE_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+</div>
+</div>
+<div class="section level2">
+<h2 id="integration-with-bioconductor">Integration with Bioconductor<a class="anchor" aria-label="anchor" href="#integration-with-bioconductor"></a>
+</h2>
+<div class="section level3">
+<h3 id="tabular-data">Tabular data<a class="anchor" aria-label="anchor" href="#tabular-data"></a>
+</h3>
+<p>This software package aims to increase the utility of existing,
+publicly available genomic summary data from genome-wide association
+studies (GWAS). Summary statistics are still widely underutilized,
+despite their wide availability. As such, Bioconductor packages with
+methods specifically designed to analyze these statistics are still
+being developed.</p>
+<p>The most commonly used repository of these summary statistics is the
+NHGRI GWAS Catalog (<a href="https://www.ebi.ac.uk/gwas/" class="external-link uri">https://www.ebi.ac.uk/gwas/</a>). From the GWAS catalog, a
+user can download full summary statistics through the FTP sites. The
+majority of these summary statistics are zipped plain text (usually
+space or tab delimited) files. The GWAS Catalog itself has recommended a
+tabular, plain-text format as its recommended GWAS summary statistic
+format. As such, this tabular data is most simply read into R as a
+dataframe structure.</p>
+</div>
+<div class="section level3">
+<h3 id="VCF">VCF data<a class="anchor" aria-label="anchor" href="#VCF"></a>
+</h3>
+<p>While the many users will download the GWAS files and load them into
+R, there are other ways to obtain GWAS summary statistics, including
+through the IEU Open GWAS Project (<a href="https://gwas.mrcieu.ac.uk/" class="external-link uri">https://gwas.mrcieu.ac.uk/</a>). The IEU Open GWAS Project
+instead uses the GWAS VCF format (<a href="https://doi.org/10.1101/2020.05.29.115824" class="external-link uri">https://doi.org/10.1101/2020.05.29.115824</a>) to store GWAS
+summary statistics and ensure alignment to the hg19 reference genome. We
+can use an assortment of Bioconductor packages and data structures to
+work with GWAS VCF data.</p>
+<p>First we will make use of the Bioconductor package
+<em>VariantAnnotation</em> to handle VCF data</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"VariantAnnotation"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">VariantAnnotation</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>We will use the VCF from this GWAS of Type 2 Diabetes <a href="https://doi.org/10.1038/s41588-018-0084-1" class="external-link uri">https://doi.org/10.1038/s41588-018-0084-1</a>. A subset of
+10,000 variants has been stored within the package and can be
+loaded.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"vcf_sample"</span><span class="op">)</span></span></code></pre></div>
+<p>We can see the name of the GWAS dataset (refers to the IEU GWAS
+database ID name)</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Biobase/man/class.MIAME.html" class="external-link">samples</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VCFHeader-class.html" class="external-link">header</a></span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "ebi-a-GCST007515"</span></span></code></pre></div>
+<p>To understand what the data format, we can look view the VCF
+object</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">vcf_sample</span></span>
+<span><span class="co">#&gt; class: CollapsedVCF </span></span>
+<span><span class="co">#&gt; dim: 10000 1 </span></span>
+<span><span class="co">#&gt; rowRanges(vcf):</span></span>
+<span><span class="co">#&gt;   GRanges with 5 metadata columns: paramRangeID, REF, ALT, QUAL, FILTER</span></span>
+<span><span class="co">#&gt; info(vcf):</span></span>
+<span><span class="co">#&gt;   DataFrame with 1 column: AF</span></span>
+<span><span class="co">#&gt; info(header(vcf)):</span></span>
+<span><span class="co">#&gt;       Number Type  Description     </span></span>
+<span><span class="co">#&gt;    AF A      Float Allele Frequency</span></span>
+<span><span class="co">#&gt; geno(vcf):</span></span>
+<span><span class="co">#&gt;   List of length 9: ES, SE, LP, AF, SS, EZ, SI, NC, ID</span></span>
+<span><span class="co">#&gt; geno(header(vcf)):</span></span>
+<span><span class="co">#&gt;       Number Type    Description                                               </span></span>
+<span><span class="co">#&gt;    ES A      Float   Effect size estimate relative to the alternative allele   </span></span>
+<span><span class="co">#&gt;    SE A      Float   Standard error of effect size estimate                    </span></span>
+<span><span class="co">#&gt;    LP A      Float   -log10 p-value for effect estimate                        </span></span>
+<span><span class="co">#&gt;    AF A      Float   Alternate allele frequency in the association study       </span></span>
+<span><span class="co">#&gt;    SS A      Integer Sample size used to estimate genetic effect               </span></span>
+<span><span class="co">#&gt;    EZ A      Float   Z-score provided if it was used to derive the EFFECT an...</span></span>
+<span><span class="co">#&gt;    SI A      Float   Accuracy score of summary data imputation                 </span></span>
+<span><span class="co">#&gt;    NC A      Integer Number of cases used to estimate genetic effect           </span></span>
+<span><span class="co">#&gt;    ID 1      String  Study variant identifier</span></span></code></pre></div>
+<p>The columns that we want for use in CCAFE are:</p>
+<p>From the rowRanges object:</p>
+<ul>
+<li>seqnames (chromosome)</li>
+<li>ranges (position)</li>
+<li>REF</li>
+<li>ALT</li>
+<li>RSID</li>
+</ul>
+<p>From the geno object:</p>
+<ul>
+<li>ES (effect size of ALT)</li>
+<li>SE</li>
+<li>AF (allele frequency of ALT)</li>
+</ul>
+<p>We then want to convert this VCF formatted dataset into a simple
+dataframe to use with CCAFE.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># first we will get the info from GRanges object (position, RSID)</span></span>
+<span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">ranges</span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="va">meta</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Position"</span>, <span class="st">"RSID"</span><span class="op">)</span></span>
+<span><span class="co"># get the chromosome (as a)</span></span>
+<span><span class="va">meta</span><span class="op">$</span><span class="va">Chromosome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html" class="external-link">seqnames</a></span><span class="op">(</span><span class="fu">rowRanges</span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># now we can also get the meta data (REF, ALT) from the GRanges object</span></span>
+<span><span class="va">meta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">meta</span>, <span class="fu">mcols</span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">meta</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># now we will get the info from the geno object</span></span>
+<span><span class="va">geno_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VCF-class.html" class="external-link">geno</a></span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span><span class="op">$</span><span class="va">ES</span><span class="op">)</span>,</span>
+<span>  SE <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VCF-class.html" class="external-link">geno</a></span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span><span class="op">$</span><span class="va">SE</span><span class="op">)</span>,</span>
+<span>  AF <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/VariantAnnotation/man/VCF-class.html" class="external-link">geno</a></span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span><span class="op">$</span><span class="va">AF</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">meta</span>, <span class="va">geno_dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Position        RSID Chromosome REF ALT    beta     SE     AF</span></span>
+<span><span class="co">#&gt; 1   762320  rs75333668          1   C   T -0.0352 0.0574 0.0078</span></span>
+<span><span class="co">#&gt; 2   861349 rs200686669          1   C   T -0.0299 0.1821 0.0034</span></span>
+<span><span class="co">#&gt; 3   865545 rs201186828          1   G   A  0.1188 0.1535 0.0041</span></span>
+<span><span class="co">#&gt; 4   865584 rs148711625          1   G   A -0.2004 0.0840 0.0219</span></span>
+<span><span class="co">#&gt; 5   865625 rs146327803          1   G   A -0.0778 0.2306 0.0046</span></span>
+<span><span class="co">#&gt; 6   865628  rs41285790          1   G   A -0.0037 0.0510 0.0049</span></span></code></pre></div>
+<p>For CCAFE we will use OR, so let’s create this column by
+exponentiating the effect estimate</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_data</span><span class="op">$</span><span class="va">OR</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="va">df_data</span><span class="op">$</span><span class="va">beta</span><span class="op">)</span></span></code></pre></div>
+<p>Let’s now apply the CCAFE methods to get case and control specific
+AFs</p>
+<p>First, since we have total AF, we’ll use CaseControl_AF</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CaseControl_AF.html">CaseControl_AF</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_data</span>,</span>
+<span>                              N_case <span class="op">=</span> <span class="fl">48286</span>,</span>
+<span>                              N_control <span class="op">=</span> <span class="fl">250671</span>,</span>
+<span>                              OR_colname <span class="op">=</span> <span class="st">"OR"</span>,</span>
+<span>                              AF_total_colname <span class="op">=</span> <span class="st">"AF"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Position        RSID Chromosome REF ALT    beta     SE     AF        OR</span></span>
+<span><span class="co">#&gt; 1   762320  rs75333668          1   C   T -0.0352 0.0574 0.0078 0.9654123</span></span>
+<span><span class="co">#&gt; 2   861349 rs200686669          1   C   T -0.0299 0.1821 0.0034 0.9705426</span></span>
+<span><span class="co">#&gt; 3   865545 rs201186828          1   G   A  0.1188 0.1535 0.0041 1.1261447</span></span>
+<span><span class="co">#&gt; 4   865584 rs148711625          1   G   A -0.2004 0.0840 0.0219 0.8184033</span></span>
+<span><span class="co">#&gt; 5   865625 rs146327803          1   G   A -0.0778 0.2306 0.0046 0.9251494</span></span>
+<span><span class="co">#&gt; 6   865628  rs41285790          1   G   A -0.0037 0.0510 0.0049 0.9963068</span></span>
+<span><span class="co">#&gt;       AF_case  AF_control</span></span>
+<span><span class="co">#&gt; 1 0.007574252 0.007843485</span></span>
+<span><span class="co">#&gt; 2 0.003315901 0.003416200</span></span>
+<span><span class="co">#&gt; 3 0.004523116 0.004018497</span></span>
+<span><span class="co">#&gt; 4 0.018530155 0.022549123</span></span>
+<span><span class="co">#&gt; 5 0.004309041 0.004656047</span></span>
+<span><span class="co">#&gt; 6 0.004884892 0.004902910</span></span></code></pre></div>
+<p>We can look at a comparison of the AFs</p>
+<p>Create a dataframe to plot</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">plotdata_AF</span> <span class="op">&lt;-</span> <span class="va">df_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">AF</span>, <span class="va">AF_case</span>, <span class="va">AF_control</span><span class="op">)</span></span>
+<span><span class="va">plotdata_AF</span><span class="op">$</span><span class="va">AF_total</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">plotdata_AF</span><span class="op">$</span><span class="va">AF_case</span><span class="op">*</span><span class="fl">48286</span> <span class="op">+</span> <span class="va">plotdata_AF</span><span class="op">$</span><span class="va">AF_control</span><span class="op">*</span><span class="fl">250671</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">298857</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">plotdata_AF</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"AF(known)"</span></span>
+<span><span class="va">plotdata_AF_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">plotdata_AF</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">plotdata_AF</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Plot the results</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">plotdata_AF_long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, fill <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span>, outliers <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="CCAFE_files/figure-html/unnamed-chunk-17-1.png" width="100%"></p>
+<p>These case and control AFs can now be used in further downstream
+analyses. For example, if the data was harmonized with a reference
+panel, then Summix2 (<a href="https://www.bioconductor.org/packages/release/bioc/html/Summix.html" class="external-link uri">https://www.bioconductor.org/packages/release/bioc/html/Summix.html</a>)
+could be used to estimate substructure in the GWAS sample (total sample,
+cases, or controls). The AFs could also be used in case-case GWAS (see
+<a href="https://wolffha.github.io/CCAFE_documentation/articles/CCAFE_CCGWAS.html" class="external-link uri">https://wolffha.github.io/CCAFE_documentation/articles/CCAFE_CCGWAS.html</a>)
+or certain meta-analysis software (e.g. <a href="https://doi.org/10.1038/s41598-022-12185-6" class="external-link uri">https://doi.org/10.1038/s41598-022-12185-6</a>).</p>
+<div class="section level4">
+<h4 id="vcf-conversion-function">VCF Conversion Function<a class="anchor" aria-label="anchor" href="#vcf-conversion-function"></a>
+</h4>
+<p>For ease of use of CCAFE with VCF files, we have included a function
+‘CCAFE_convertVCF()’.</p>
+<p>It performs the steps outlined above, assuming the user has loaded
+their VCF into R.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_data_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CCAFE_convertVCF.html">CCAFE_convertVCF</a></span><span class="op">(</span><span class="va">vcf_sample</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Valid VCF object, converting to dataframe for CCAFE...</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_data_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CaseControl_AF.html">CaseControl_AF</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df_data_2</span>,</span>
+<span>                              N_case <span class="op">=</span> <span class="fl">48286</span>,</span>
+<span>                              N_control <span class="op">=</span> <span class="fl">250671</span>,</span>
+<span>                              OR_colname <span class="op">=</span> <span class="st">"OR"</span>,</span>
+<span>                              AF_total_colname <span class="op">=</span> <span class="st">"AF"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df_data_2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Position        RSID Chromosome REF ALT    beta     SE     AF        OR</span></span>
+<span><span class="co">#&gt; 1   762320  rs75333668          1   C   T -0.0352 0.0574 0.0078 0.9654123</span></span>
+<span><span class="co">#&gt; 2   861349 rs200686669          1   C   T -0.0299 0.1821 0.0034 0.9705426</span></span>
+<span><span class="co">#&gt; 3   865545 rs201186828          1   G   A  0.1188 0.1535 0.0041 1.1261447</span></span>
+<span><span class="co">#&gt; 4   865584 rs148711625          1   G   A -0.2004 0.0840 0.0219 0.8184033</span></span>
+<span><span class="co">#&gt; 5   865625 rs146327803          1   G   A -0.0778 0.2306 0.0046 0.9251494</span></span>
+<span><span class="co">#&gt; 6   865628  rs41285790          1   G   A -0.0037 0.0510 0.0049 0.9963068</span></span>
+<span><span class="co">#&gt;       AF_case  AF_control</span></span>
+<span><span class="co">#&gt; 1 0.007574252 0.007843485</span></span>
+<span><span class="co">#&gt; 2 0.003315901 0.003416200</span></span>
+<span><span class="co">#&gt; 3 0.004523116 0.004018497</span></span>
+<span><span class="co">#&gt; 4 0.018530155 0.022549123</span></span>
+<span><span class="co">#&gt; 5 0.004309041 0.004656047</span></span>
+<span><span class="co">#&gt; 6 0.004884892 0.004902910</span></span></code></pre></div>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="session-information">Session Information<a class="anchor" aria-label="anchor" href="#session-information"></a>
+</h2>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.1 (2024-06-14 ucrt)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64</span></span>
-<span><span class="co">#&gt; Running under: Windows 11 x64 (build 22631)</span></span>
+<span><span class="co">#&gt; Running under: Windows 11 x64 (build 26100)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -487,28 +726,53 @@ European individuals.</p>
 <span><span class="co">#&gt; tzcode source: internal</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attached base packages:</span></span>
-<span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span><span class="co">#&gt; [1] stats4    stats     graphics  grDevices utils     datasets  methods  </span></span>
+<span><span class="co">#&gt; [8] base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt;  [1] lubridate_1.9.3 forcats_1.0.0   stringr_1.5.1   dplyr_1.1.4    </span></span>
-<span><span class="co">#&gt;  [5] purrr_1.0.2     readr_2.1.5     tidyr_1.3.1     tibble_3.2.1   </span></span>
-<span><span class="co">#&gt;  [9] ggplot2_3.5.1   tidyverse_2.0.0 CCAFE_0.99.0   </span></span>
+<span><span class="co">#&gt;  [1] VariantAnnotation_1.52.0    Rsamtools_2.22.0           </span></span>
+<span><span class="co">#&gt;  [3] Biostrings_2.74.0           XVector_0.46.0             </span></span>
+<span><span class="co">#&gt;  [5] SummarizedExperiment_1.36.0 Biobase_2.66.0             </span></span>
+<span><span class="co">#&gt;  [7] GenomicRanges_1.58.0        GenomeInfoDb_1.42.1        </span></span>
+<span><span class="co">#&gt;  [9] IRanges_2.40.0              S4Vectors_0.44.0           </span></span>
+<span><span class="co">#&gt; [11] MatrixGenerics_1.18.0       matrixStats_1.4.1          </span></span>
+<span><span class="co">#&gt; [13] BiocGenerics_0.52.0         lubridate_1.9.4            </span></span>
+<span><span class="co">#&gt; [15] forcats_1.0.0               stringr_1.5.1              </span></span>
+<span><span class="co">#&gt; [17] dplyr_1.1.4                 purrr_1.0.2                </span></span>
+<span><span class="co">#&gt; [19] readr_2.1.5                 tidyr_1.3.1                </span></span>
+<span><span class="co">#&gt; [21] tibble_3.2.1                ggplot2_3.5.1              </span></span>
+<span><span class="co">#&gt; [23] tidyverse_2.0.0             CCAFE_0.99.3               </span></span>
+<span><span class="co">#&gt; [25] BiocStyle_2.34.0           </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] sass_0.4.9        utf8_1.2.4        generics_0.1.3    stringi_1.8.4    </span></span>
-<span><span class="co">#&gt;  [5] hms_1.1.3         digest_0.6.36     magrittr_2.0.3    timechange_0.3.0 </span></span>
-<span><span class="co">#&gt;  [9] evaluate_0.24.0   grid_4.4.1        fastmap_1.2.0     jsonlite_1.8.8   </span></span>
-<span><span class="co">#&gt; [13] fansi_1.0.6       scales_1.3.0      textshaping_0.4.0 jquerylib_0.1.4  </span></span>
-<span><span class="co">#&gt; [17] cli_3.6.3         rlang_1.1.4       munsell_0.5.1     withr_3.0.1      </span></span>
-<span><span class="co">#&gt; [21] cachem_1.1.0      yaml_2.3.10       tools_4.4.1       tzdb_0.4.0       </span></span>
-<span><span class="co">#&gt; [25] colorspace_2.1-1  vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4  </span></span>
-<span><span class="co">#&gt; [29] fs_1.6.4          htmlwidgets_1.6.4 ragg_1.3.2        pkgconfig_2.0.3  </span></span>
-<span><span class="co">#&gt; [33] desc_1.4.3        pkgdown_2.1.0     pillar_1.9.0      bslib_0.8.0      </span></span>
-<span><span class="co">#&gt; [37] gtable_0.3.5      glue_1.7.0        systemfonts_1.1.0 highr_0.11       </span></span>
-<span><span class="co">#&gt; [41] xfun_0.45         tidyselect_1.2.1  rstudioapi_0.16.0 knitr_1.48       </span></span>
-<span><span class="co">#&gt; [45] farver_2.1.2      htmltools_0.5.8.1 labeling_0.4.3    rmarkdown_2.28   </span></span>
-<span><span class="co">#&gt; [49] compiler_4.4.1</span></span></code></pre></div>
-</div>
+<span><span class="co">#&gt;  [1] DBI_1.2.3                bitops_1.0-9             rlang_1.1.4             </span></span>
+<span><span class="co">#&gt;  [4] magrittr_2.0.3           compiler_4.4.1           RSQLite_2.3.9           </span></span>
+<span><span class="co">#&gt;  [7] GenomicFeatures_1.58.0   png_0.1-8                systemfonts_1.1.0       </span></span>
+<span><span class="co">#&gt; [10] vctrs_0.6.5              pkgconfig_2.0.3          crayon_1.5.3            </span></span>
+<span><span class="co">#&gt; [13] fastmap_1.2.0            labeling_0.4.3           utf8_1.2.4              </span></span>
+<span><span class="co">#&gt; [16] rmarkdown_2.29           tzdb_0.4.0               UCSC.utils_1.2.0        </span></span>
+<span><span class="co">#&gt; [19] ragg_1.3.3               bit_4.5.0.1              xfun_0.49               </span></span>
+<span><span class="co">#&gt; [22] zlibbioc_1.52.0          cachem_1.1.0             jsonlite_1.8.9          </span></span>
+<span><span class="co">#&gt; [25] blob_1.2.4               DelayedArray_0.32.0      BiocParallel_1.40.0     </span></span>
+<span><span class="co">#&gt; [28] parallel_4.4.1           R6_2.5.1                 bslib_0.8.0             </span></span>
+<span><span class="co">#&gt; [31] stringi_1.8.4            rtracklayer_1.66.0       jquerylib_0.1.4         </span></span>
+<span><span class="co">#&gt; [34] bookdown_0.42            knitr_1.49               Matrix_1.7-1            </span></span>
+<span><span class="co">#&gt; [37] timechange_0.3.0         tidyselect_1.2.1         rstudioapi_0.17.1       </span></span>
+<span><span class="co">#&gt; [40] abind_1.4-8              yaml_2.3.10              codetools_0.2-20        </span></span>
+<span><span class="co">#&gt; [43] curl_6.0.1               lattice_0.22-6           withr_3.0.2             </span></span>
+<span><span class="co">#&gt; [46] KEGGREST_1.46.0          evaluate_1.0.1           desc_1.4.3              </span></span>
+<span><span class="co">#&gt; [49] pillar_1.9.0             BiocManager_1.30.25      generics_0.1.3          </span></span>
+<span><span class="co">#&gt; [52] RCurl_1.98-1.16          hms_1.1.3                munsell_0.5.1           </span></span>
+<span><span class="co">#&gt; [55] scales_1.3.0             glue_1.8.0               tools_4.4.1             </span></span>
+<span><span class="co">#&gt; [58] BiocIO_1.16.0            BSgenome_1.74.0          GenomicAlignments_1.42.0</span></span>
+<span><span class="co">#&gt; [61] fs_1.6.5                 XML_3.99-0.17            grid_4.4.1              </span></span>
+<span><span class="co">#&gt; [64] AnnotationDbi_1.68.0     colorspace_2.1-1         GenomeInfoDbData_1.2.13 </span></span>
+<span><span class="co">#&gt; [67] restfulr_0.0.15          cli_3.6.3                textshaping_0.4.1       </span></span>
+<span><span class="co">#&gt; [70] fansi_1.0.6              S4Arrays_1.6.0           gtable_0.3.6            </span></span>
+<span><span class="co">#&gt; [73] sass_0.4.9               digest_0.6.36            SparseArray_1.6.0       </span></span>
+<span><span class="co">#&gt; [76] rjson_0.2.23             htmlwidgets_1.6.4        farver_2.1.2            </span></span>
+<span><span class="co">#&gt; [79] memoise_2.0.1            htmltools_0.5.8.1        pkgdown_2.1.1           </span></span>
+<span><span class="co">#&gt; [82] lifecycle_1.0.4          httr_1.4.7               bit64_4.5.2</span></span></code></pre></div>
 </div>
   </div>
 
@@ -527,7 +791,7 @@ European individuals.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
